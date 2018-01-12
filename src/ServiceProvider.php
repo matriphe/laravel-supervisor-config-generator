@@ -8,7 +8,6 @@ class ServiceProvider extends BaseServiceProvider
 {
     /**
      * Register the application services.
-     *
      */
     public function register()
     {
