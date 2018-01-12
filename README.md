@@ -1,5 +1,9 @@
 # Laravel Supervisor Config Generator
 
+[![Build Status](https://travis-ci.org/matriphe/laravel-supervisor-config-generator.svg?branch=master)](https://travis-ci.org/matriphe/laravel-supervisor-config-generator)
+[![Total Download](https://img.shields.io/packagist/dt/matriphe/supervisor.svg)](https://packagist.org/packages/matriphe/supervisor)
+[![Latest Stable Version](https://img.shields.io/packagist/v/matriphe/supervisor.svg)](https://packagist.org/packages/matriphe/supervisor)
+
 This package generates Supervisor config that used by Laravel to monitor queue worker. Make sure Supervisor is installed properly.
 
 ## Installation
