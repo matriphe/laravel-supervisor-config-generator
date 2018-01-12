@@ -1,0 +1,45 @@
+{
+    "name": "matriphe/supervisor",
+    "description": "Generate Supervisor config for monitoring Laravel worker process",
+    "keywords": ["laravel", "supervisor", "config", "generator", "command"],
+    "require": {
+        "illuminate/console": "~5.0",
+        "illuminate/support": "~5.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.0",
+        "orchestra/testbench": "~3.0",
+        "phpunit/phpunit": "~4.0|~5.0|~6.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Muhammad Zamroni",
+            "email": "halo@matriphe.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Matriphe\\Supervisor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Matriphe\\Tests\\Supervisor\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Matriphe\\Supervisor\\ServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -1,0 +1,4 @@
+vendor/
+*.lock
+*.cache
+.DS_Store
