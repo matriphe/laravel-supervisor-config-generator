@@ -35,14 +35,14 @@ class Generator extends Command
     protected $description = 'Generate Supervisor config for queue workers';
 
     /**
-     * Filesystem handler
+     * Filesystem handler.
      *
      * @var \Illuminate\Filesystem\Filesystem
      */
     private $file;
 
     /**
-     * Application handler
+     * Application handler.
      *
      * @var Illuminate\Foundation\Application
      */
@@ -50,7 +50,6 @@ class Generator extends Command
 
     /**
      * Create a new command instance.
-     *
      */
     public function __construct(Filesystem $file, Application $application)
     {
@@ -74,7 +73,7 @@ class Generator extends Command
 
         $preview = $this->option('preview');
 
-        if (! $preview) {
+        if (!$preview) {
             $this->checkPathWritable($path);
             $this->checkPathWritable($logdir);
         }
@@ -120,7 +119,7 @@ class Generator extends Command
     }
 
     /**
-     * Get stub
+     * Get stub.
      *
      * @return string
      */
@@ -130,19 +129,19 @@ class Generator extends Command
     }
 
     /**
-     * Check if path writable
+     * Check if path writable.
      *
      * @param mixed $path
      */
     protected function checkPathWritable($path)
     {
-        if (! $this->file->isWritable($path)) {
+        if (!$this->file->isWritable($path)) {
             throw new Exception('Make sure you has permission to write to `'.$path.'`');
         }
     }
 
     /**
-     * Get Laravel base version
+     * Get Laravel base version.
      *
      * @return string
      */
@@ -152,9 +151,10 @@ class Generator extends Command
     }
 
     /**
-     * Get artisan worker command used in production based by Laravel base version
+     * Get artisan worker command used in production based by Laravel base version.
      *
-     * @param  string $version
+     * @param string $version
+     *
      * @return string
      */
     protected function getProductionWorker($version) : string
@@ -167,9 +167,10 @@ class Generator extends Command
     }
 
     /**
-     * Get artisan worker command used in development based by Laravel base version
+     * Get artisan worker command used in development based by Laravel base version.
      *
-     * @param  string $version
+     * @param string $version
+     *
      * @return string
      */
     protected function getDevelopmentWorker($version) : string
@@ -178,9 +179,10 @@ class Generator extends Command
     }
 
     /**
-     * Get artisan worker command used in production based by production flag
+     * Get artisan worker command used in production based by production flag.
      *
-     * @param  bool   $production
+     * @param bool $production
+     *
      * @return string
      */
     protected function getWorkerCommand($production) : string
