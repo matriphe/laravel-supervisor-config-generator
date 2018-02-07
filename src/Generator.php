@@ -124,7 +124,7 @@ class Generator extends Command
      *
      * @return string
      */
-    protected function getStub() : string
+    protected function getStub()
     {
         return $this->file->get(__DIR__.'/stub/supervisor.stub');
     }
@@ -146,7 +146,7 @@ class Generator extends Command
      *
      * @return string
      */
-    protected function getLaravelBaseVersion() : string
+    protected function getLaravelBaseVersion()
     {
         return substr($this->application->version(), 0, 3);
     }
@@ -157,7 +157,7 @@ class Generator extends Command
      * @param  string $version
      * @return string
      */
-    protected function getProductionWorker($version) : string
+    protected function getProductionWorker($version)
     {
         if (in_array($version, ['5.0', '5.1', '5.2'])) {
             return 'queue:work --daemon';
@@ -172,7 +172,7 @@ class Generator extends Command
      * @param  string $version
      * @return string
      */
-    protected function getDevelopmentWorker($version) : string
+    protected function getDevelopmentWorker($version)
     {
         return 'queue:listen';
     }
@@ -183,7 +183,7 @@ class Generator extends Command
      * @param  bool   $production
      * @return string
      */
-    protected function getWorkerCommand($production) : string
+    protected function getWorkerCommand($production)
     {
         $version = $this->getLaravelBaseVersion();
 
