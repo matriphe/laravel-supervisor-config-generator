@@ -1,5 +1,5 @@
 [program:{{appname}}]
-command=php {{appdir}}/artisan {{worker}} --queue={{queue}} --tries={{tries}} --timeout={{timeout}}
+command={{php}} {{appdir}}/artisan {{worker}} --queue={{queue}} --tries={{tries}} --timeout={{timeout}}
 process_num={{process}}
 numprocs={{process}}
 process_name=%(process_num)s

@@ -17,6 +17,7 @@ class Generator extends Command
      * @var string
      */
     protected $signature = 'supervisor:config
+        {--php=/usr/bin/php : PHP binary path}
         {--path=/etc/supervisord/conf.d : Supervisord config path}
         {--queue=default : Queue name}
         {--tries=3 : Number of attempts to execute}
@@ -139,8 +140,9 @@ class Generator extends Command
     protected function getSearches()
     {
         return [
-            '{{appname}}', '{{queue}}', '{{worker}}', '{{tries}}', '{{process}}',
-            '{{appdir}}', '{{priority}}', '{{logfile}}', '{{timeout}}',
+            '{{php}}', '{{appname}}', '{{queue}}', '{{worker}}', '{{tries}}',
+            '{{process}}', '{{appdir}}', '{{priority}}', '{{logfile}}',
+            '{{timeout}}',
         ];
     }
 
@@ -156,8 +158,8 @@ class Generator extends Command
         extract($options);
 
         return compact(
-            'appname', 'queue', 'worker', 'tries', 'process',
-            'appdir', 'priority', 'logfile', 'timeout'
+            'php', 'appname', 'queue', 'worker', 'tries', 'process', 'appdir',
+            'priority', 'logfile', 'timeout'
         );
     }
 
