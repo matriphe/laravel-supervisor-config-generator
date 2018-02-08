@@ -113,18 +113,4 @@ class GeneratorTest extends TestCase
     {
         $this->app[Kernel::class]->registerCommand($command);
     }
-
-    // public function testPreviewConfigFileWithoutParameters()
-    // {
-    //     // Run command: supervisor:config
-    //     // Receive success message
-    //     // Config file created
-    // }
-
-    // public function testFailedCreateConfigFileWithPermissionProblem()
-    // {
-    //     // Run command: supervisor:config
-    //     // Receive success message
-    //     // Config file created
-    // }
 }

@@ -39,14 +39,21 @@ class Generator extends Command
      *
      * @var \Illuminate\Filesystem\Filesystem
      */
-    private $file;
+    protected $file;
 
     /**
      * Application handler.
      *
      * @var Illuminate\Foundation\Application
      */
-    private $application;
+    protected $application;
+
+    /**
+     * Application worker name.
+     *
+     * @var Illuminate\Foundation\Application
+     */
+    protected $appname;
 
     /**
      * Create a new command instance.
@@ -68,8 +75,13 @@ class Generator extends Command
     {
         $this->info($this->description);
 
+        $appdir = rtrim(base_path(), '/');
+
         $path = rtrim($this->option('path'), '/');
         $logdir = rtrim($this->option('logdir'), '/');
+
+        $filename = $this->getFilename();
+        $appname = $filename;
 
         $preview = $this->option('preview');
 
@@ -78,27 +90,16 @@ class Generator extends Command
             $this->checkPathWritable($logdir);
         }
 
-        extract($this->option());
-
-        $queue = Str::slug($this->option('queue'));
-        $appname = Str::slug(config('api.name'));
-        $appdir = rtrim(base_path(), '/');
-
-        $filename = implode('-', array_filter([$appname, $queue]));
-        $appname = $filename;
-
         $worker = $this->getWorkerCommand($this->option('production'));
         $logfile = implode('/', array_filter([$logdir, $filename.'.log']));
 
-        $search = [
-            '{{appname}}', '{{queue}}', '{{worker}}', '{{tries}}', '{{process}}',
-            '{{appdir}}', '{{priority}}', '{{logfile}}', '{{timeout}}',
-        ];
+        $search = $this->getSearches();
 
-        $replacement = compact(
-            'appname', 'queue', 'worker', 'tries', 'process',
-            'appdir', 'priority', 'logfile', 'timeout'
+        $options = array_merge(
+            $this->option(), compact('appname', 'worker', 'logfile', 'appdir')
         );
+
+        $replacement = $this->getReplacements($options);
 
         $file = $this->getStub();
         $content = str_replace($search, $replacement, $file);
@@ -116,6 +117,48 @@ class Generator extends Command
         $this->file->put($filepath, $content);
 
         return $this->comment('Config file saved to <fg=yellow>'.$filepath.'</>');
+    }
+
+    /**
+     * Get file name.
+     *
+     * @return string
+     */
+    protected function getFilename()
+    {
+        return Str::slug(implode(' ', array_filter([
+            config('app.name'), $this->option('queue'),
+        ])), '_');
+    }
+
+    /**
+     * Get search keywords.
+     *
+     * @return array
+     */
+    protected function getSearches()
+    {
+        return [
+            '{{appname}}', '{{queue}}', '{{worker}}', '{{tries}}', '{{process}}',
+            '{{appdir}}', '{{priority}}', '{{logfile}}', '{{timeout}}',
+        ];
+    }
+
+    /**
+     * Get replacement variables.
+     *
+     * @param array $options
+     *
+     * @return array
+     */
+    protected function getReplacements($options = [])
+    {
+        extract($options);
+
+        return compact(
+            'appname', 'queue', 'worker', 'tries', 'process',
+            'appdir', 'priority', 'logfile', 'timeout'
+        );
     }
 
     /**
