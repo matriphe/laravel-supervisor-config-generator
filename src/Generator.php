@@ -16,7 +16,7 @@ class Generator extends Command
      *
      * @var string
      */
-    protected $signature = 'supervisor:config
+    protected $signature = 'supervisor:queue
         {--php=/usr/bin/php : PHP binary path}
         {--path=/etc/supervisord/conf.d : Supervisord config path}
         {--queue=default : Queue name}
