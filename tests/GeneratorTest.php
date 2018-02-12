@@ -49,7 +49,7 @@ class GeneratorTest extends TestCase
         $command = new SupervisorConfigGenerator($this->file, $this->application);
         $this->registerCommand($command);
 
-        $output = $this->artisan('supervisor:config');
+        $output = $this->artisan('supervisor:queue');
 
         $this->assertSame(0, $output);
     }
@@ -65,7 +65,7 @@ class GeneratorTest extends TestCase
         $command = new SupervisorConfigGenerator($this->file, $this->application);
         $this->registerCommand($command);
 
-        $output = $this->artisan('supervisor:config', ['--preview' => true]);
+        $output = $this->artisan('supervisor:queue', ['--preview' => true]);
 
         $this->assertSame(0, $output);
     }
@@ -82,7 +82,7 @@ class GeneratorTest extends TestCase
         $command = new SupervisorConfigGenerator($this->file, $this->application);
         $this->registerCommand($command);
 
-        $output = $this->artisan('supervisor:config');
+        $output = $this->artisan('supervisor:queue');
 
         $this->assertSame(0, $output);
     }
@@ -104,7 +104,7 @@ class GeneratorTest extends TestCase
         $command = new SupervisorConfigGenerator($this->file, $this->application);
         $this->registerCommand($command);
 
-        $output = $this->artisan('supervisor:config');
+        $output = $this->artisan('supervisor:queue');
 
         $this->assertSame(0, $output);
     }

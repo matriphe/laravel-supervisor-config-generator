@@ -33,7 +33,7 @@ Nothing to do, this package is using package auto-discovery.
 Using `root` access, run
 
 ```bash
-php artisan supervisor:config
+php artisan supervisor:queue
 ```
 
 By default, this will save the configuration file to `/etc/supervisord/conf.d` directory. To change this, use `--path` option on the command.
@@ -46,7 +46,7 @@ The output of the config file is like this.
 
 ```conf
 [program:appname-default]
-command=php /Volumes/data/Development/php/laravel/55/artisan queue:work --queue=default --tries=3 --timeout=60
+command=/usr/bin/php /Volumes/data/Development/php/laravel/55/artisan queue:work --queue=default --tries=3 --timeout=60
 process_num=5
 numprocs=5
 process_name=%(process_num)s
