@@ -8,25 +8,16 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Input\InputOption;
 
-class Generator extends Command
+abstract class Generator extends Command
 {
     /**
-     * The name and signature of the console command.
+     * The name of the console command.
      *
      * @var string
      */
-    protected $signature = 'supervisor:queue
-        {--php=/usr/bin/php : PHP binary path}
-        {--path=/etc/supervisord/conf.d : Supervisord config path}
-        {--queue=default : Queue name}
-        {--tries=3 : Number of attempts to execute}
-        {--process=1 : Number of child process}
-        {--timeout=60 : Timeout in seconds}
-        {--production : Used in production}
-        {--priority=999 : Priority value}
-        {--logdir=/var/log/supervisor : Log directory}
-        {--preview : Preview configuration without writing to file}';
+    protected $name = 'supervisor:generator';
 
     /**
      * The console command description.
@@ -34,6 +25,20 @@ class Generator extends Command
      * @var string
      */
     protected $description = 'Generate Supervisor config for queue workers';
+
+    /**
+     * The default queue name.
+     *
+     * @var string
+     */
+    protected $queue = 'default';
+
+    /**
+     * The default queue identifier.
+     *
+     * @var string
+     */
+    protected $identifier;
 
     /**
      * Filesystem handler.
@@ -128,7 +133,7 @@ class Generator extends Command
     protected function getFilename()
     {
         return Str::slug(implode(' ', array_filter([
-            config('app.name'), $this->option('queue'),
+            config('app.name'), $this->identifier, $this->option('queue'),
         ])), '_');
     }
 
@@ -168,10 +173,7 @@ class Generator extends Command
      *
      * @return string
      */
-    protected function getStub()
-    {
-        return $this->file->get(__DIR__.'/stub/supervisor.stub');
-    }
+    abstract protected function getStub();
 
     /**
      * Check if path writable.
@@ -202,14 +204,7 @@ class Generator extends Command
      *
      * @return string
      */
-    protected function getProductionWorker($version)
-    {
-        if (in_array($version, ['5.0', '5.1', '5.2'])) {
-            return 'queue:work --daemon';
-        }
-
-        return 'queue:work';
-    }
+    abstract protected function getProductionWorker($version);
 
     /**
      * Get artisan worker command used in development based by Laravel base version.
@@ -218,10 +213,7 @@ class Generator extends Command
      *
      * @return string
      */
-    protected function getDevelopmentWorker($version)
-    {
-        return 'queue:listen';
-    }
+    abstract protected function getDevelopmentWorker($version);
 
     /**
      * Get artisan worker command used in production based by production flag.
@@ -239,5 +231,50 @@ class Generator extends Command
         }
 
         return $this->getDevelopmentWorker($version);
+    }
+
+    /**
+     * Get the base console command options.
+     *
+     * @return array
+     */
+    protected function getBaseOptions()
+    {
+        return [
+            ['production', null, InputOption::VALUE_NONE, 'Used in production', null],
+            ['preview', null, InputOption::VALUE_NONE, 'Preview configuration without writing to file', null],
+
+            ['queue', null, InputOption::VALUE_REQUIRED, 'Queue name', $this->queue],
+            ['path', null, InputOption::VALUE_REQUIRED, 'Supervisord config path', '/etc/supervisor/conf.d'],
+            ['tries', null, InputOption::VALUE_REQUIRED, 'Number of attempts to execute', 3],
+            ['process', null, InputOption::VALUE_REQUIRED, 'Number of child process', 1],
+            ['timeout', null, InputOption::VALUE_REQUIRED, 'Process timeout in seconds', 60],
+            ['priority', null, InputOption::VALUE_REQUIRED, 'Priority value', 999],
+            ['logdir', null, InputOption::VALUE_REQUIRED, 'Log directory', '/var/log/supervisor'],
+        ];
+    }
+
+    /**
+     * Get the additional console command options.
+     *
+     * @return array
+     */
+    protected function getAdditionalOptions()
+    {
+        return [
+            ['php', null, InputOption::VALUE_REQUIRED, 'PHP binary path', '/usr/bin/php'],
+        ];
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return array_merge(
+            $this->getAdditionalOptions(), $this->getBaseOptions()
+        );
     }
 }

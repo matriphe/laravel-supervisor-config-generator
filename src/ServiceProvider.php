@@ -12,7 +12,8 @@ class ServiceProvider extends BaseServiceProvider
     public function register()
     {
         $this->commands([
-            Generator::class,
+            QueueGenerator::class,
+            HorizonGenerator::class,
         ]);
     }
 }

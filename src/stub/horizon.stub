@@ -1,0 +1,9 @@
+[program:{{appname}}]
+command={{php}} {{appdir}}/artisan horizon
+process_name=%(program_name)s
+autostart=true
+autorestart=unexpected
+startretries={{tries}}
+stopsignal=QUIT
+redirect_stderr=true
+stderr_logfile={{logfile}}

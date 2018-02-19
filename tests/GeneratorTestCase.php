@@ -5,23 +5,13 @@ namespace Matriphe\Tests\Supervisor;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
-use Matriphe\Supervisor\Generator as SupervisorConfigGenerator;
 use Mockery;
 
-class GeneratorTest extends TestCase
+abstract class GeneratorTestCase extends TestCase
 {
-    protected $stub = '
-        [program:{{appname}}-{{queue}}]
-        command=php {{appdir}}/artisan {{worker}} --queue={{queue}} --tries={{tries}} --timeout={{timeout}}
-        process_num={{process}}
-        numprocs={{process}}
-        process_name=%(process_num)s
-        priority={{priority}}
-        autostart=true
-        autorestart=unexpected
-        startretries={{tries}}
-        stopsignal=QUIT
-        stderr_logfile={{logfile}}';
+    protected $stub;
+
+    protected $command;
 
     public function setUp()
     {
@@ -46,10 +36,10 @@ class GeneratorTest extends TestCase
 
         $this->application->shouldReceive('version')->once()->andReturn('5.5.x');
 
-        $command = new SupervisorConfigGenerator($this->file, $this->application);
+        $command = $this->getCommand();
         $this->registerCommand($command);
 
-        $output = $this->artisan('supervisor:queue');
+        $output = $this->artisan($this->command);
 
         $this->assertSame(0, $output);
     }
@@ -62,10 +52,10 @@ class GeneratorTest extends TestCase
 
         $this->application->shouldReceive('version')->once()->andReturn('5.5.x');
 
-        $command = new SupervisorConfigGenerator($this->file, $this->application);
+        $command = $this->getCommand();
         $this->registerCommand($command);
 
-        $output = $this->artisan('supervisor:queue', ['--preview' => true]);
+        $output = $this->artisan($this->command, ['--preview' => true]);
 
         $this->assertSame(0, $output);
     }
@@ -74,15 +64,15 @@ class GeneratorTest extends TestCase
     {
         $this->file->shouldReceive('isWritable')
             ->once()
-            ->with('/etc/supervisord/conf.d')
+            ->with('/etc/supervisor/conf.d')
             ->andReturn(false);
 
         $this->expectException('Exception');
 
-        $command = new SupervisorConfigGenerator($this->file, $this->application);
+        $command = $this->getCommand();
         $this->registerCommand($command);
 
-        $output = $this->artisan('supervisor:queue');
+        $output = $this->artisan($this->command);
 
         $this->assertSame(0, $output);
     }
@@ -91,7 +81,7 @@ class GeneratorTest extends TestCase
     {
         $this->file->shouldReceive('isWritable')
             ->once()
-            ->with('/etc/supervisord/conf.d')
+            ->with('/etc/supervisor/conf.d')
             ->andReturn(true);
 
         $this->file->shouldReceive('isWritable')
@@ -101,13 +91,15 @@ class GeneratorTest extends TestCase
 
         $this->expectException('Exception');
 
-        $command = new SupervisorConfigGenerator($this->file, $this->application);
+        $command = $this->getCommand();
         $this->registerCommand($command);
 
-        $output = $this->artisan('supervisor:queue');
+        $output = $this->artisan($this->command);
 
         $this->assertSame(0, $output);
     }
+
+    abstract protected function getCommand();
 
     protected function registerCommand($command)
     {
