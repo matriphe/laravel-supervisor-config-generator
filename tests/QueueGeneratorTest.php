@@ -23,6 +23,6 @@ class QueueGeneratorTest extends GeneratorTestCase
 
     protected function getCommand()
     {
-        return new QueueGenerator($this->file, $this->application);
+        return new QueueGenerator($this->file);
     }
 }

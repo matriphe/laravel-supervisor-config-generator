@@ -5,7 +5,6 @@ namespace Matriphe\Supervisor;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
@@ -64,12 +63,11 @@ abstract class Generator extends Command
     /**
      * Create a new command instance.
      */
-    public function __construct(Filesystem $file, Application $application)
+    public function __construct(Filesystem $file)
     {
         parent::__construct();
 
         $this->file = $file;
-        $this->application = $application;
     }
 
     /**
@@ -84,6 +82,7 @@ abstract class Generator extends Command
         $appdir = rtrim(base_path(), '/');
 
         $path = rtrim($this->option('path'), '/');
+
         $logdir = rtrim($this->option('logdir'), '/');
 
         $filename = $this->getFilename();
@@ -194,7 +193,7 @@ abstract class Generator extends Command
      */
     protected function getLaravelBaseVersion()
     {
-        return substr($this->application->version(), 0, 3);
+        return substr($this->laravel->version(), 0, 3);
     }
 
     /**

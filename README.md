@@ -18,7 +18,7 @@ composer require matriphe/supervisor
 
 ### Laravel < 5.5
 
-After installed, open `config/app.php` and find this line.
+After installed, open `config/app.php` and add this line.
 
 ```php
 Matriphe\Supervisor\ServiceProvider::class
@@ -27,6 +27,14 @@ Matriphe\Supervisor\ServiceProvider::class
 ### Laravel > 5.5
 
 Nothing to do, this package is using package auto-discovery.
+
+### Lumen
+
+Open `bootstrap.app` and add this line.
+
+```php
+$app->register(Matriphe\Supervisor\ServiceProvider::class);
+```
 
 ## Usage
 

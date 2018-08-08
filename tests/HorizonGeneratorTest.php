@@ -21,6 +21,6 @@ class HorizonGeneratorTest extends GeneratorTestCase
 
     protected function getCommand()
     {
-        return new HorizonGenerator($this->file, $this->application);
+        return new HorizonGenerator($this->file);
     }
 }

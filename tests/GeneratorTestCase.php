@@ -4,7 +4,6 @@ namespace Matriphe\Tests\Supervisor;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Application;
 use Mockery;
 
 abstract class GeneratorTestCase extends TestCase
@@ -18,7 +17,6 @@ abstract class GeneratorTestCase extends TestCase
         parent::setUp();
 
         $this->file = Mockery::mock(Filesystem::class);
-        $this->application = Mockery::mock(Application::class);
     }
 
     public function tearDown()
@@ -34,8 +32,6 @@ abstract class GeneratorTestCase extends TestCase
         $this->file->shouldReceive('get')->once()->andReturn($this->stub);
         $this->file->shouldReceive('put')->once()->andReturn(true);
 
-        $this->application->shouldReceive('version')->once()->andReturn('5.5.x');
-
         $command = $this->getCommand();
         $this->registerCommand($command);
 
@@ -49,8 +45,6 @@ abstract class GeneratorTestCase extends TestCase
         $this->file->shouldReceive('isWritable')->never();
         $this->file->shouldReceive('get')->once()->andReturn($this->stub);
         $this->file->shouldReceive('put')->never();
-
-        $this->application->shouldReceive('version')->once()->andReturn('5.5.x');
 
         $command = $this->getCommand();
         $this->registerCommand($command);
