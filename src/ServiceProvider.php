@@ -14,6 +14,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->commands([
             QueueGenerator::class,
             HorizonGenerator::class,
+            EchoGenerator::class,
         ]);
     }
 }

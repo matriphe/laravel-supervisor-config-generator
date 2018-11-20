@@ -1,0 +1,10 @@
+[program:{{appname}}]
+directory={{appdir}}
+command={{node}} {{echo}} start --dir={{appdir}}
+process_name=%(program_name)s
+autostart=true
+autorestart=unexpected
+startretries={{tries}}
+stopsignal=QUIT
+redirect_stderr=true
+stderr_logfile={{logfile}}
